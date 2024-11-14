@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoGame - Kurallar</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="intro-container">
+  <h2>GeoGame - Oyun Kuralları</h2>
+  <p>Bu oyun, Hacettepe Harita Mühendisliği binasını ele geçirmeye çalışan bir saldırı simülasyonudur. Elinizdeki GIS Coin ile asker alabilir ve savunmayı aşmaya çalışabilirsiniz.</p>
+  <h3>Asker Türleri</h3>
+  <ul>
+    <li><strong>Piyade</strong>: 10 GIS Coin - 10 piyade bir "squad" oluşturur.</li>
+    <li><strong>Atlı Asker</strong>: 50 GIS Coin - 5 atlı asker bir "squad" oluşturur.</li>
+    <li><strong>Tank</strong>: 100 GIS Coin - Her bir tank tek başına güçlü bir birimdir.</li>
+    <li><strong>Uçak</strong>: 300 GIS Coin - Hızlı hareket eden bir birim, doğrudan hedefe uçar.</li>
+  </ul>
+  <button onclick="returnToGame()">Oyuna Dön</button>
+</div>
+
+<script>
+  // Tarayıcıda bir önceki sayfaya dönerek oyun ekranına geri dön
+  function returnToGame() {
+    history.back();
+  }
+</script>
+</body>
+</html>

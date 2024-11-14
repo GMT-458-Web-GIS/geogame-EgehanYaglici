@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoGame</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+</head>
+<body>
+
+<!-- Map Section -->
+<div id="map"></div>
+
+<!-- Control Panel -->
+<div id="control-panel">
+  <h3>Purchase Units</h3>
+  <p>Remaining GIS Coin: <span id="coin-amount">1000</span></p>
+  <div class="buy-options">
+    <button onclick="buyUnit('infantry')">Infantry - 100 GIS (10 Soldiers)</button>
+    <button onclick="buyUnit('cavalry')">Cavalry - 350 GIS (5 Soldiers)</button>
+    <button onclick="buyUnit('tank')">Tank - 500 GIS (1 Unit)</button>
+    <button onclick="buyUnit('airplane')">Airplane - 600 GIS (1 Unit)</button>
+  </div>
+  <button class="action-button" onclick="confirmRoute()">Confirm Route</button>
+  <button class="action-button" id="confirm-button" onclick="mobilizeUnits()">Mobilize Units</button>
+  <button class="action-button" onclick="startBattle()">Start Battle</button>
+  <button class="action-button" id="how-to-play-button" onclick="window.location.href='intro.html'">How to Play</button>
+
+  
+  <!-- Battle Status and Log -->
+  <div id="battle-status" style="display: none;">
+    <h3>Battle Status</h3>
+    <p id="battle-round-info">Round: -</p>
+    <div id="battle-log"></div>
+  </div>
+
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+<script src="map.js"></script>
+<script src="player.js"></script>
+<script src="combat.js"></script>
+
+
+</body>
+</html>
