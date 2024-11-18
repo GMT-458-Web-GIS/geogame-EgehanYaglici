@@ -21,14 +21,11 @@ const unitSpeeds = {
 };
 
 const unitStats = {
-  infantry: { attack: 10, health: 100, range: 70, speed: 100, energy: 100 },
-  cavalry: { attack: 15, health: 120, range: 70, speed: 80, energy: 120 },
-  tank: { attack: 30, health: 200, range: 200, speed: 60, energy: 150 },
-  airplane: { attack: 40, health: 150, range: 250, speed: 120, energy: 200 }
+  infantry: { attack: 100, health: 900, range: 70, speed: 100 },
+  cavalry: { attack: 75, health: 690, range: 70, speed: 80 },
+  tank: { attack: 30, health: 2000, range: 200, speed: 60 },
+  airplane: { attack: 40, health: 2000, range: 250, speed: 120 }
 };
-
-// Enerji tüketimi hesaplama
-const energyPerDistance = 0.05;
 
 function getRandomColor() {
   const letters = '0123456789ABCDEF';
@@ -84,9 +81,11 @@ function addUnitsToSquad(type, quantity) {
     count: quantity,
     id: playerUnits.length + 1,
     stats: {
-      ...unitStats[type],
-      currentHealth: unitStats[type].health * quantity,
-      energy: unitStats[type].energy
+      attack: unitStats[type].attack,
+      health: unitStats[type].health,
+      range: unitStats[type].range,
+      speed: unitStats[type].speed,
+      currentHealth: unitStats[type].health
     },
     position: {}
   };
@@ -102,6 +101,8 @@ function getUnitIcon(type) {
     case "cavalry": iconUrl = "images/cavalary.svg"; break;
     case "tank": iconUrl = "images/tank.svg"; break;
     case "airplane": iconUrl = "images/fighter_jet.svg"; break;
+    case "cannonball": iconUrl = "images/cannonball.svg"; break;
+    case "machineGun": iconUrl = "images/machine_gun.svg"; break;
     default: iconUrl = "";
   }
   return L.icon({ iconUrl: iconUrl, iconSize: [30, 30] });
@@ -153,7 +154,6 @@ function selectSquad(marker, squad, index) {
   });
 }
 
-// Geçici rota planla (infantry veya cavalry için)
 map.on('click', async function (e) {
   if (activeSquadIndex === null) return;
 
@@ -178,8 +178,7 @@ map.on('click', async function (e) {
 
     plannedRoute.on('routesfound', function (e) {
       const route = e.routes[0];
-      const totalDistance = calculateRouteDistance(route.coordinates);
-      applyEnergyCost(selectedUnit, totalDistance);
+      calculateRouteDistance(route.coordinates);
     });
 
   } else if (selectedUnit.type === 'tank' || selectedUnit.type === 'airplane') {
@@ -189,21 +188,9 @@ map.on('click', async function (e) {
       weight: 5
     }).addTo(map);
 
-    const routeCoordinates = plannedRoute.getLatLngs();
-    const totalDistance = calculateRouteDistance(routeCoordinates);
-    applyEnergyCost(selectedUnit, totalDistance);
+    calculateRouteDistance(plannedRoute.getLatLngs());
   }
 });
-
-function applyEnergyCost(unit, distance) {
-  const energyCost = distance * energyPerDistance;
-  if (unit.stats.energy >= energyCost) {
-    unit.stats.energy -= energyCost;
-    updateBattleLog(`${unit.type} moved. Energy used: ${energyCost.toFixed(1)}. Remaining energy: ${unit.stats.energy}`);
-  } else {
-    updateBattleLog(`${unit.type} does not have enough energy to complete the route.`);
-  }
-}
 
 function calculateRouteDistance(routeCoordinates) {
   let totalDistance = 0;

@@ -114,24 +114,3 @@ p {
 
 
 
-/* Mobil Düzen */
-@media (max-width: 768px) {
-  #map {
-    height: 50vh;
-  }
-
-  .buy-options button {
-    width: 100%;
-    margin: 5px 0;
-  }
-
-  #control-panel {
-    padding: 10px;
-    font-size: 1em;
-  }
-
-  .action-button {
-    width: 100%;
-    margin-top: 10px;
-  }
-}
