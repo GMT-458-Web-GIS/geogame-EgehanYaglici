@@ -111,6 +111,36 @@ p {
 }
 
 
+/* Zar Animasyonu Alanı */
+#dice-area {
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.dice {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #007bff;
+  text-align: center;
+  animation: rollDice 1s ease-in-out;
+}
+
+@keyframes rollDice {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(180deg) scale(1.2); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+
+
+
+
+
 
 
 

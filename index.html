@@ -27,7 +27,15 @@
   <button class="action-button" onclick="startBattle()">Start Battle</button>
   <button class="action-button" id="how-to-play-button" onclick="window.location.href='intro.html'">How to Play</button>
 
-  
+  <!-- Zar Animasyonu Alanı -->
+  <div id="dice-area">
+    <div id="dice-results">
+      <div id="attack-dice" class="dice">Attack Dice: 🎲</div>
+      <div id="defense-dice" class="dice">Defense Dice: 🎲</div>
+    </div>
+  </div>
+
+
   <!-- Battle Status and Log -->
   <div id="battle-status" style="display: none;">
     <h3>Battle Status</h3>
@@ -42,6 +50,8 @@
 <script src="map.js"></script>
 <script src="player.js"></script>
 <script src="combat.js"></script>
+<script src="roll_dice.js"></script>
+
 
 
 </body>

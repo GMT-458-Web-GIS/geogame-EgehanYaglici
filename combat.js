@@ -1,17 +1,17 @@
 let defenseUnits = [];
 let currentRound = 1;
 let isBattleOngoing = false;
-let roundLog = []; // Her round için log tutma
+let roundLog = []; // Log for each round
 
-// Savunma birimlerinin istatistikleri ve güçlü oldukları birimler
+// Defense unit stats and strong-against list
 const defenseUnitStats = {
-  infantry: { attack: 100, health: 900, range: 70, speed: 100 },
-  cavalry: { attack: 75, health: 450, range: 70, speed: 80 },
-  cannonball: { attack: 50, health: 500, range: 250, speed: 50, strongAgainst: ["tank"] },
-  machineGun: { attack: 40, health: 450, range: 350, speed: 70, strongAgainst: ["airplane"] }
+  infantry: { attack: 100, health: 900, range: 100, speed: 100 },
+  cavalry: { attack: 150, health: 450, range: 100, speed: 80 },
+  cannonball: { attack: 80, health: 2000, range: 250, speed: 50, strongAgainst: ["tank"] },
+  machineGun: { attack: 80, health: 1500, range: 350, speed: 70, strongAgainst: ["airplane"] }
 };
 
-// Savunma birimlerini haritaya yerleştir
+// Place defense units on the map
 function placeDefenseUnits() {
   const defenseTypes = ["infantry", "cavalry", "cannonball", "machineGun"];
   const defensePositions = [
@@ -42,10 +42,10 @@ function placeDefenseUnits() {
   });
 }
 
-// Oyunun başında savunma birimlerini yerleştir
+// Initialize defense units at the start of the game
 placeDefenseUnits();
 
-// Savaşı başlat
+// Start the battle
 function startBattle() {
   if (isBattleOngoing) return;
 
@@ -57,7 +57,7 @@ function startBattle() {
   executeRound();
 }
 
-// Roundları sıralı işlemek için
+// Execute rounds sequentially
 async function executeRound() {
   if (!isBattleOngoing || defenseUnits.length === 0 || playerUnits.length === 0) {
     isBattleOngoing = false;
@@ -66,34 +66,38 @@ async function executeRound() {
     return;
   }
 
-  roundLog = []; // Yeni round için log temizle
+  roundLog = []; // Clear log for the new round
   updateBattleLog(`Round ${currentRound} started.`);
 
-  // Saldırı birimleri sırayla savunma birimlerine saldırır
+  // Roll dice and apply effects
+  startRoundWithDice(playerUnits, defenseUnits);
+  await waitForDiceAnimation(); // Wait for dice animation to finish
+
+  // Process attacks
   for (let playerUnit of playerUnits) {
-    if (playerUnit.stats.currentHealth <= 0) continue; // Ölü birimleri atla
+    if (playerUnit.stats.currentHealth <= 0) continue; // Skip dead units
 
     for (let defenseUnit of defenseUnits) {
-      if (defenseUnit.health <= 0) continue; // Ölü savunma birimlerini atla
+      if (defenseUnit.health <= 0) continue; // Skip dead defense units
 
-      await processAttack(playerUnit, defenseUnit, true);
-      await processAttack(defenseUnit, playerUnit, false);
+      await processAttack(playerUnit, defenseUnit, true); // Player unit attacks
+      await processAttack(defenseUnit, playerUnit, false); // Defense unit counterattacks
     }
   }
 
-  summarizeRound(); // Round özeti loglanır
+  summarizeRound(); // Summarize the round
   currentRound++;
   document.getElementById("battle-round-info").textContent = `Round: ${currentRound}`;
   updateBattleLog(`Round ${currentRound - 1} ended.`);
 
-  setTimeout(executeRound, 1000); // Bir sonraki round'a geçiş
+  setTimeout(executeRound, 1000); // Move to the next round
 }
 
-// Saldırı işlemlerini gerçekleştiren işlev
+// Process individual attack
 async function processAttack(attacker, defender, isPlayerAttacking) {
   const distance = calculateDistance(attacker.position, defender.position);
 
-  // Loglama: Saldırı detayları
+  // Log attack details
   updateBattleLog(`Processing attack: ${capitalize(attacker.type)} -> ${capitalize(defender.type)}`);
   updateBattleLog(
     `Attacker Stats: Type: ${attacker.type}, Health: ${attacker.stats?.currentHealth || attacker.health}, Attack: ${attacker.stats?.attack || attacker.attack}`
@@ -102,7 +106,7 @@ async function processAttack(attacker, defender, isPlayerAttacking) {
     `Defender Stats: Type: ${defender.type}, Health: ${defender.stats?.currentHealth || defender.health}, Attack: ${defender.stats?.attack || defender.attack}`
   );
 
-  // Menzil kontrolü
+  // Range check
   if (distance > attacker.range) {
     drawLine(attacker.position, defender.position, 'red', "Out of range");
     roundLog.push(`${capitalize(attacker.type)} could not reach ${capitalize(defender.type)} (out of range).`);
@@ -110,15 +114,15 @@ async function processAttack(attacker, defender, isPlayerAttacking) {
     return;
   }
 
-  // Başarılı saldırı
+  // Successful attack
   drawLine(attacker.position, defender.position, 'green');
   let actualDamage = isPlayerAttacking ? attacker.stats.attack : attacker.attack;
 
   if (!isPlayerAttacking && attacker.strongAgainst?.includes(defender.type)) {
-    actualDamage *= 1.5; // Güçlü birim avantajı
+    actualDamage *= 1.5; // Bonus damage for strong-against types
   }
 
-  // Hasar uygulama
+  // Apply damage
   if (isPlayerAttacking) {
     defender.health = Math.max(0, defender.health - actualDamage);
     roundLog.push(
@@ -139,16 +143,16 @@ async function processAttack(attacker, defender, isPlayerAttacking) {
     }
   }
 
-  await wait(500); // Saldırı sonrası bekleme
+  await wait(500); // Wait between attacks
 }
 
-// Round özetini battle log'a ekle
+// Summarize the round in the battle log
 function summarizeRound() {
   updateBattleLog(`Summary for Round ${currentRound}:`);
   roundLog.forEach(entry => updateBattleLog(entry));
 }
 
-// Savunma birimini kaldır
+// Remove a defense unit
 function removeDefenseUnit(unit) {
   const index = defenseUnits.indexOf(unit);
   if (index > -1) {
@@ -157,7 +161,7 @@ function removeDefenseUnit(unit) {
   }
 }
 
-// Oyuncu birimini kaldır
+// Remove a player unit
 function removePlayerUnit(unit) {
   const index = playerUnits.indexOf(unit);
   if (index > -1) {
@@ -167,12 +171,12 @@ function removePlayerUnit(unit) {
   }
 }
 
-// İki konum arasındaki mesafeyi hesapla
+// Calculate distance between two positions
 function calculateDistance(position1, position2) {
   return map.distance(position1, position2);
 }
 
-// Haritada saldırı çizgisi çiz ve geçici olarak göster
+// Draw a line on the map for attacks
 function drawLine(position1, position2, color, tooltip = null) {
   const line = L.polyline([position1, position2], {
     color,
@@ -187,7 +191,7 @@ function drawLine(position1, position2, color, tooltip = null) {
   }, 2000);
 }
 
-// Savaş logunu güncelle
+// Update the battle log
 function updateBattleLog(message) {
   const log = document.getElementById("battle-log");
   const logEntry = document.createElement("p");
@@ -196,15 +200,15 @@ function updateBattleLog(message) {
   log.scrollTop = log.scrollHeight;
 }
 
-// Belirli bir süre bekle (milisaniye cinsinden)
+// Wait for a specified duration (in milliseconds)
 function wait(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// Metinlerin ilk harfini büyük yapar
+// Capitalize the first letter of a string
 function capitalize(text) {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
-// "Savaşı Başlat" butonuna işlev ekleme
+// Add event listener for starting the battle
 document.getElementById("startBattleButton").addEventListener("click", startBattle);
