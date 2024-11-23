@@ -6,7 +6,7 @@ let roundLog = []; // Log for each round
 // Defense unit stats and strong-against list
 const defenseUnitStats = {
   infantry: { attack: 100, health: 900, range: 100, speed: 100 },
-  cavalry: { attack: 150, health: 450, range: 100, speed: 80 },
+  cavalry: { attack: 150, health: 1500, range: 100, speed: 80 },
   cannonball: { attack: 80, health: 2000, range: 250, speed: 50, strongAgainst: ["tank"] },
   machineGun: { attack: 80, health: 1500, range: 350, speed: 70, strongAgainst: ["airplane"] }
 };
@@ -63,6 +63,7 @@ async function executeRound() {
     isBattleOngoing = false;
     const resultMessage = defenseUnits.length === 0 ? "Victory!" : "Defeat!";
     updateBattleLog(resultMessage);
+    updateCurrentStatus(playerUnits, defenseUnits); // Final güncelleme
     return;
   }
 
@@ -81,9 +82,13 @@ async function executeRound() {
       if (defenseUnit.health <= 0) continue; // Skip dead defense units
 
       await processAttack(playerUnit, defenseUnit, true); // Player unit attacks
+      if (defenseUnit.health <= 0) removeDefenseUnit(defenseUnit); // Remove dead defense units
+
       await processAttack(defenseUnit, playerUnit, false); // Defense unit counterattacks
+      if (playerUnit.stats.currentHealth <= 0) removePlayerUnit(playerUnit); // Remove dead player units
     }
   }
+
 
   summarizeRound(); // Summarize the round
   currentRound++;
@@ -93,11 +98,44 @@ async function executeRound() {
   setTimeout(executeRound, 1000); // Move to the next round
 }
 
-// Process individual attack
+// Update the current status tables
+function updateCurrentStatus(playerUnits, defenseUnits) {
+  const playerTableBody = document.querySelector("#player-status-table tbody");
+  const defenseTableBody = document.querySelector("#defense-status-table tbody");
+
+  // Temizle
+  playerTableBody.innerHTML = "";
+  defenseTableBody.innerHTML = "";
+
+  // Saldırı birimleri (Player Units)
+  playerUnits.forEach(unit => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${capitalize(unit.type)}</td>
+      <td>${Math.round(unit.stats.attack)}</td>
+      <td>${Math.round(unit.stats.currentHealth)}/${Math.round(unit.stats.health)}</td>
+      <td>${Math.round(unit.stats.range)}</td>
+    `;
+    playerTableBody.appendChild(row);
+  });
+
+  // Savunma birimleri (Defense Units)
+  defenseUnits.forEach(unit => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${capitalize(unit.type)}</td>
+      <td>${Math.round(unit.attack)}</td>
+      <td>${Math.round(unit.health)}</td>
+      <td>${Math.round(unit.range)}</td>
+    `;
+    defenseTableBody.appendChild(row);
+  });
+}
+
 async function processAttack(attacker, defender, isPlayerAttacking) {
   const distance = calculateDistance(attacker.position, defender.position);
 
-  // Log attack details
+  // Log saldırı detayları
   updateBattleLog(`Processing attack: ${capitalize(attacker.type)} -> ${capitalize(defender.type)}`);
   updateBattleLog(
     `Attacker Stats: Type: ${attacker.type}, Health: ${attacker.stats?.currentHealth || attacker.health}, Attack: ${attacker.stats?.attack || attacker.attack}`
@@ -106,23 +144,33 @@ async function processAttack(attacker, defender, isPlayerAttacking) {
     `Defender Stats: Type: ${defender.type}, Health: ${defender.stats?.currentHealth || defender.health}, Attack: ${defender.stats?.attack || defender.attack}`
   );
 
-  // Range check
+  // Atak birimi menzil dışındaysa
   if (distance > attacker.range) {
-    drawLine(attacker.position, defender.position, 'red', "Out of range");
+    drawLine(attacker.position, defender.position, 'red', "Attacker out of range");
     roundLog.push(`${capitalize(attacker.type)} could not reach ${capitalize(defender.type)} (out of range).`);
     await wait(500);
-    return;
+    return; // Saldırı iptal edilir
   }
 
-  // Successful attack
+  // Savunma birimi menzil dışındaysa
+  if (distance > defender.range) {
+    drawLine(defender.position, attacker.position, 'red', "Defender out of range");
+    roundLog.push(`${capitalize(defender.type)} could not reach ${capitalize(attacker.type)} (out of range).`);
+    await wait(500);
+    return; // Savunma saldırısı iptal edilir
+  }
+
+  // Eğer hem saldıran hem de savunan menzil içindeyse saldırı gerçekleşir
   drawLine(attacker.position, defender.position, 'green');
+
   let actualDamage = isPlayerAttacking ? attacker.stats.attack : attacker.attack;
 
+  // Güçlü birime karşı saldırıda ekstra hasar
   if (!isPlayerAttacking && attacker.strongAgainst?.includes(defender.type)) {
-    actualDamage *= 1.5; // Bonus damage for strong-against types
+    actualDamage *= 1.5; // %50 bonus hasar
   }
 
-  // Apply damage
+  // Hasarı savunma birimine uygula
   if (isPlayerAttacking) {
     defender.health = Math.max(0, defender.health - actualDamage);
     roundLog.push(
@@ -142,9 +190,10 @@ async function processAttack(attacker, defender, isPlayerAttacking) {
       removePlayerUnit(defender);
     }
   }
-
-  await wait(500); // Wait between attacks
+  updateCurrentStatus(playerUnits, defenseUnits);
+  await wait(500); // Saldırı sonrası bekleme
 }
+
 
 // Summarize the round in the battle log
 function summarizeRound() {

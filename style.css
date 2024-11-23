@@ -1,146 +1,197 @@
-/* Genel harita ve kontrol paneli */
+/* Genel Layout */
+#game-container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  background-color: #0d1117; /* Siyah tema */
+  color: #c9d1d9; /* Açık gri yazı rengi */
+}
+
+/* Harita Alanı */
 #map {
-  height: 60vh;
-  width: 100%;
+  flex: 2;
+  height: 100%;
+  border-right: 1px solid #30363d; /* Harita ile sağ panel arasında ayrım */
 }
 
-/* Rota tarif kutusunu gizler */
-.leaflet-top.leaflet-right {
-  display: none;
+/* Sağ Panel */
+#right-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #161b22;
+  padding: 15px;
+  overflow-y: auto;
+  border-left: 1px solid #30363d;
 }
 
+/* Başlıklar ve Yazılar */
+h3, h4, p {
+  color: #f0f6fc;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Satın Alma ve Kontroller */
 #control-panel {
   padding: 15px;
-  background-color: #f0f0f0;
+  margin-bottom: 15px;
+  background-color: #21262d;
+  border: 1px solid #30363d;
+  border-radius: 12px;
   text-align: center;
-  font-size: 1.1em;
 }
 
-/* Birim satın alma butonları */
-.buy-options button {
-  margin: 5px;
-  padding: 12px;
+/* Satın Alma Butonları */
+.unit-button {
+  width: 100%;
+  padding: 15px;
+  margin: 8px 0;
   font-size: 1em;
-  cursor: pointer;
-  background-color: #007bff;
+  font-weight: bold;
   color: white;
+  background: linear-gradient(145deg, #ff7b00, #ff5722);
   border: none;
-  border-radius: 5px;
-  min-width: 100px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
 }
 
-.buy-options button:hover {
-  background-color: #0056b3;
+.unit-button:hover {
+  background: linear-gradient(145deg, #ff5722, #e64a19);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(255, 87, 34, 0.5);
 }
 
-/* Genel buton tasarımı */
+/* Aksiyon Butonları */
 .action-button {
-  margin-top: 10px;
-  padding: 10px 15px;
+  width: 100%;
+  padding: 15px;
+  margin: 10px 0;
   font-size: 1em;
-  background-color: #28a745;
+  font-weight: bold;
   color: white;
+  background: linear-gradient(145deg, #4caf50, #388e3c);
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
-  min-width: 130px;
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
 }
 
 .action-button:hover {
-  background-color: #218838;
+  background: linear-gradient(145deg, #388e3c, #2e7d32);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(76, 175, 80, 0.5);
 }
 
-p {
+/* Toggle Buton */
+.toggle-button {
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 15px;
+  font-size: 1em;
   font-weight: bold;
-  font-size: 1.2em;
+  color: white;
+  background: linear-gradient(145deg, #007bff, #0056b3);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Giriş Sayfası Stilleri */
-.intro-container {
-  width: 90%;
-  max-width: 500px;
-  margin: 10% auto;
+.toggle-button:hover {
+  background: linear-gradient(145deg, #0056b3, #003f88);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.5);
+}
+
+/* Zar Alanı */
+#dice-area {
   padding: 20px;
-  background-color: #fefefe;
-  border-radius: 5px;
+  margin-bottom: 15px;
+  background-color: #21262d;
+  border: 1px solid #30363d;
+  border-radius: 12px;
   text-align: center;
 }
 
-.intro-container h2, .intro-container h3 {
-  margin-top: 0;
-}
-
-.intro-container ul {
-  padding-left: 20px;
-  text-align: left;
-}
-
-.intro-container button {
-  background-color: #007bff;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.intro-container button:hover {
-  background-color: #0056b3;
-}
-
-
-#battle-status {
-  padding: 10px;
-  margin-top: 15px;
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-#battle-log p {
-  margin: 5px 0;
-  font-size: 0.9em;
-  color: #333;
-}
-
-#battle-log .highlight {
-  font-weight: bold;
-  color: #007bff;
-}
-
-
-/* Zar Animasyonu Alanı */
-#dice-area {
-  margin-top: 15px;
+#dice-results {
   display: flex;
   justify-content: space-around;
-  padding: 10px;
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  margin: 15px 0;
 }
 
 .dice {
-  font-size: 1.5em;
+  flex: 1;
+  margin: 0 10px;
+  padding: 15px;
+  font-size: 1.2em;
   font-weight: bold;
-  color: #007bff;
   text-align: center;
-  animation: rollDice 1s ease-in-out;
+  color: white;
+  background: linear-gradient(145deg, #343a40, #21262d);
+  border: 2px solid #007bff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
 }
 
-@keyframes rollDice {
-  0% { transform: rotate(0deg); }
-  50% { transform: rotate(180deg) scale(1.2); }
-  100% { transform: rotate(360deg) scale(1); }
+.dice:hover {
+  background: linear-gradient(145deg, #21262d, #007bff);
+  transform: scale(1.1);
+  box-shadow: 0 6px 12px rgba(0, 123, 255, 0.4);
 }
 
+#dice-effects {
+  margin-top: 10px;
+  font-size: 0.9em;
+  font-style: italic;
+  color: #9ea7b3;
+}
 
+/* Current Status */
+#current-status {
+  padding: 20px;
+  margin-bottom: 15px;
+  background-color: #21262d;
+  border: 1px solid #30363d;
+  border-radius: 12px;
+}
 
+/* Tablo Stilleri */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  color: white;
+}
 
+table th, table td {
+  border: 1px solid #30363d;
+  text-align: center;
+  padding: 10px;
+}
 
+table th {
+  background-color: #30363d;
+  color: #f0f6fc;
+  font-weight: bold;
+}
 
+table td {
+  background-color: #21262d;
+}
 
+/* Battle Status */
+#battle-status {
+  padding: 20px;
+  margin-top: 10px;
+  background-color: #21262d;
+  border: 1px solid #30363d;
+  border-radius: 12px;
+}
 
-
+/* Leaflet Harita Kutusunu Gizle */
+.leaflet-top.leaflet-right {
+  display: none;
+}

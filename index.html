@@ -9,40 +9,85 @@
 </head>
 <body>
 
-<!-- Map Section -->
-<div id="map"></div>
+<!-- Game Container -->
+<div id="game-container">
+  <!-- Harita Alanı -->
+  <div id="map"></div>
 
-<!-- Control Panel -->
-<div id="control-panel">
-  <h3>Purchase Units</h3>
-  <p>Remaining GIS Coin: <span id="coin-amount">1000</span></p>
-  <div class="buy-options">
-    <button onclick="buyUnit('infantry')">Infantry - 100 GIS (10 Soldiers)</button>
-    <button onclick="buyUnit('cavalry')">Cavalry - 350 GIS (5 Soldiers)</button>
-    <button onclick="buyUnit('tank')">Tank - 500 GIS (1 Unit)</button>
-    <button onclick="buyUnit('airplane')">Airplane - 600 GIS (1 Unit)</button>
-  </div>
-  <button class="action-button" onclick="confirmRoute()">Confirm Route</button>
-  <button class="action-button" id="confirm-button" onclick="mobilizeUnits()">Mobilize Units</button>
-  <button class="action-button" onclick="startBattle()">Start Battle</button>
-  <button class="action-button" id="how-to-play-button" onclick="window.location.href='intro.html'">How to Play</button>
+  <!-- Sağ Panel -->
+  <div id="right-panel">
+    <!-- Satın Alma ve Kontroller -->
+    <div id="control-panel">
+      <h3>Purchase Units</h3>
+      <p>Remaining GIS Coin: <span id="coin-amount">1000</span></p>
+      <div class="buy-options">
+        <button class="unit-button" onclick="buyUnit('infantry')">Infantry - 100 GIS (10 Soldiers)</button>
+        <button class="unit-button" onclick="buyUnit('cavalry')">Cavalry - 350 GIS (5 Soldiers)</button>
+        <button class="unit-button" onclick="buyUnit('tank')">Tank - 500 GIS (1 Unit)</button>
+        <button class="unit-button" onclick="buyUnit('airplane')">Airplane - 600 GIS (1 Unit)</button>
+      </div>
+      <button class="action-button" onclick="confirmRoute()">Confirm Route</button>
+      <button class="action-button" id="confirm-button" onclick="mobilizeUnits()">Mobilize Units</button>
+      <button class="action-button" onclick="startBattle()">Start Battle</button>
+      <button class="action-button" id="how-to-play-button" onclick="window.location.href='intro.html'">How to Play</button>
+      <button class="action-button" id="hide-buttons" onclick="togglePurchaseButtons()">Toggle Purchase Buttons</button>
+    </div>
 
-  <!-- Zar Animasyonu Alanı -->
-  <div id="dice-area">
-    <div id="dice-results">
-      <div id="attack-dice" class="dice">Attack Dice: 🎲</div>
-      <div id="defense-dice" class="dice">Defense Dice: 🎲</div>
+    <!-- Zar Sonuçları -->
+    <div id="dice-area">
+      <h4>Dice Roll Results</h4>
+      <div id="dice-results">
+        <div id="attack-dice" class="dice">Attack Dice: 🎲</div>
+        <div id="defense-dice" class="dice">Defense Dice: 🎲</div>
+      </div>
+      <div id="dice-effects">
+        <p id="attack-effect">Attack Effect: None</p>
+        <p id="defense-effect">Defense Effect: None</p>
+      </div>
+    </div>
+
+    <!-- Current Status -->
+    <div id="current-status">
+      <h3>Current Status</h3>
+      <div id="status-tables">
+        <div>
+          <h4>Player Units</h4>
+          <table id="player-status-table">
+            <thead>
+            <tr>
+              <th>Type</th>
+              <th>Attack</th>
+              <th>Health</th>
+              <th>Range</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div>
+          <h4>Defense Units</h4>
+          <table id="defense-status-table">
+            <thead>
+            <tr>
+              <th>Type</th>
+              <th>Attack</th>
+              <th>Health</th>
+              <th>Range</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Battle Status -->
+    <div id="battle-status">
+      <h3>Battle Status (For details)</h3>
+      <p id="battle-round-info">Round: -</p>
+      <div id="battle-log"></div>
     </div>
   </div>
-
-
-  <!-- Battle Status and Log -->
-  <div id="battle-status" style="display: none;">
-    <h3>Battle Status</h3>
-    <p id="battle-round-info">Round: -</p>
-    <div id="battle-log"></div>
-  </div>
-
 </div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -51,8 +96,13 @@
 <script src="player.js"></script>
 <script src="combat.js"></script>
 <script src="roll_dice.js"></script>
-
-
+<script>
+  // Satın Alma Butonlarını Gizleme/Açma
+  function togglePurchaseButtons() {
+    const buyOptions = document.querySelector('.buy-options');
+    buyOptions.style.display = buyOptions.style.display === 'none' ? 'block' : 'none';
+  }
+</script>
 
 </body>
 </html>
