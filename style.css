@@ -376,3 +376,71 @@ table td {
 .tutorial-highlight.pulse {
   animation: highlight-pulse 1.5s infinite;
 }
+
+
+
+
+/* Genel Mobil Uyum Ayarları */
+@media (max-width: 768px) {
+  #game-container {
+    flex-direction: column; /* Harita ve sağ panel alt alta gelir */
+    height: auto; /* Yüksekliği esnek hale getir */
+  }
+
+  #map {
+    flex: none;
+    height: 50vh; /* Harita yüksekliği azaltılır */
+    border-right: none; /* Mobilde gereksiz çizgi kaldırılır */
+    border-bottom: 1px solid #30363d; /* Alt çizgi eklenir */
+  }
+
+  #right-panel {
+    flex: none;
+    width: 100%; /* Sağ panel tam genişlik kaplar */
+    height: auto; /* Yüksekliği esnek hale gelir */
+    padding: 10px;
+    overflow-y: visible; /* Mobilde kaydırma problemi olmaması için */
+  }
+
+  .unit-buttons-container,
+  .action-buttons {
+    flex-wrap: wrap; /* Butonlar aşağıya taşınabilir */
+    justify-content: center; /* Merkezde hizalanır */
+    gap: 10px; /* Aralarındaki boşluk korunur */
+  }
+
+  .unit-button, .action-button {
+    flex: 1 1 100%; /* Butonlar tam genişlikte görünür */
+    max-width: none; /* Maksimum genişlik kaldırılır */
+    padding: 12px;
+    font-size: 0.9em; /* Yazı boyutu biraz küçültülür */
+  }
+
+  /* Zar Alanı */
+  #dice-area {
+    text-align: center;
+    padding: 15px;
+  }
+
+  /* Battle Status */
+  #battle-status {
+    text-align: center;
+    padding: 10px;
+  }
+
+  /* Tutorial Mesaj Alanı */
+  .tutorial-text {
+    max-width: 90%;
+    font-size: 14px; /* Yazı boyutu küçültülür */
+    padding: 15px;
+  }
+
+  #tutorial-next {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+
+  #tutorial-close {
+    font-size: 18px;
+  }
+}
