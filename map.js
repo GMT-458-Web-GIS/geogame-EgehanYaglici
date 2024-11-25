@@ -33,7 +33,7 @@ function setAttackStartPoint() {
   } else {
     // Rastgele saldırı başlangıç noktasını belirle ve kaydet
     const angle = Math.random() * 2 * Math.PI;
-    const distance = Math.random() * 1500;
+    const distance = Math.random() * 1500; // 1.5 km içinde rastgele
     const latOffset = (distance / 111320) * Math.cos(angle);
     const lngOffset = (distance / (111320 * Math.cos(39.86554 * Math.PI / 180))) * Math.sin(angle);
 
@@ -47,11 +47,12 @@ function setAttackStartPoint() {
   }
 
   // Haritada saldırı başlangıç noktasını göster
-  L.marker([attackStartPoint.lat, attackStartPoint.lng], { title: "Saldırı Başlangıç Noktası" })
+  L.marker([attackStartPoint.lat, attackStartPoint.lng])
     .addTo(map)
-    .bindPopup("Saldırı Başlangıç Noktası")
-    .openPopup();
+    .bindPopup('Attack Start Point') // Popup içeriği
+    .openPopup(); // Popup başlangıçta açık
 }
 
 // Oyunun başında bir kez çağırılır
 setAttackStartPoint();
+

@@ -21,10 +21,10 @@ const unitSpeeds = {
 };
 
 const unitStats = {
-  infantry: { attack: 50, health: 900, range: 100, speed: 100 },
-  cavalry: { attack: 75, health: 1500, range: 100, speed: 80 },
-  tank: { attack: 150, health: 2000, range: 200, speed: 60 },
-  airplane: { attack: 200, health: 2000, range: 250, speed: 120 }
+  infantry: { attack: 100, health: 900, range: 100, speed: 100 },
+  cavalry: { attack: 150, health: 1500, range: 100, speed: 80 },
+  tank: { attack: 200, health: 2000, range: 200, speed: 60 },
+  airplane: { attack: 220, health: 2000, range: 250, speed: 120 }
 };
 
 function getRandomColor() {

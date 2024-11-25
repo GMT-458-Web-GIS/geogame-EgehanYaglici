@@ -40,7 +40,8 @@ function getDiceEffect(diceValue) {
       { type: "Special Event", description: "All units receive a special bonus" },
       { type: "Random Boost", description: "All units' attack increased by 50%" },
       { type: "Random Healing", description: "All units' health restored by 30%" },
-      { type: "Power Surge", description: "All units' attack increased by 75%" }
+      { type: "Power Surge", description: "All units' attack increased by 75%" },
+      { type: "Range Boost", description: "All units' range increased by 20%" } // Yeni Etki
     ]
   };
 
@@ -113,6 +114,11 @@ function applyDiceEffects(attackEffect, defenseEffect, playerUnits, defenseUnits
       unit.stats.attack += unit.stats.attack * 0.75;
     });
     updateBattleLog("Power Surge: All player units' attack increased by 75%!");
+  } else if (attackEffect.type === "Range Boost") {
+    playerUnits.forEach(unit => {
+      unit.stats.range += unit.stats.range * 0.2;
+    });
+    updateBattleLog("Range Boost: All player units' range increased by 20%!");
   }
 
   // Savunma zarının etkilerini uygula
@@ -151,6 +157,11 @@ function applyDiceEffects(attackEffect, defenseEffect, playerUnits, defenseUnits
       unit.attack += unit.attack * 0.75;
     });
     updateBattleLog("Power Surge: All defense units' attack increased by 75%!");
+  } else if (defenseEffect.type === "Range Boost") {
+    defenseUnits.forEach(unit => {
+      unit.range += unit.range * 0.2;
+    });
+    updateBattleLog("Range Boost: All defense units' range increased by 20%!");
   }
 }
 

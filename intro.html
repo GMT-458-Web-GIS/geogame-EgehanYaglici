@@ -4,18 +4,127 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GeoGame - Kurallar</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Genel Stil */
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #1e1e1e;
+      color: #f1f1f1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    /* Intro Container */
+    .intro-container {
+      background-color: #292929;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+      max-width: 800px;
+      text-align: center;
+      color: #f1f1f1;
+      overflow-y: auto;
+    }
+
+    /* Başlıklar */
+    .intro-container h2 {
+      color: #ffcc00;
+      margin-bottom: 20px;
+      font-size: 28px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+    }
+
+    .intro-container h3 {
+      color: #ffa726;
+      margin-top: 20px;
+      font-size: 24px;
+    }
+
+    /* Paragraflar ve Liste */
+    .intro-container p {
+      color: #dddddd;
+      line-height: 1.6;
+      font-size: 16px;
+      margin: 10px 0;
+    }
+
+    .intro-container ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .intro-container ul li {
+      background-color: #383838;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+    }
+
+    .intro-container ul li strong {
+      color: #ffcc00;
+    }
+
+    /* Buton */
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
+
+    button:active {
+      background-color: #003f7f;
+      transform: scale(1);
+    }
+
+    /* Scroll için */
+    .intro-container {
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #444;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+  </style>
 </head>
 <body>
 <div class="intro-container">
   <h2>GeoGame - Oyun Kuralları</h2>
-  <p>Bu oyun, Hacettepe Harita Mühendisliği binasını ele geçirmeye çalışan bir saldırı simülasyonudur. Elinizdeki GIS Coin ile asker alabilir ve savunmayı aşmaya çalışabilirsiniz.</p>
+  <p>Bu oyun, Hacettepe Harita Mühendisliği binasını ele geçirmeye çalışan bir saldırı simülasyonudur. Elinizdeki GIS Coin ile asker alabilir ve savunma birimlerini yok etmeye çalışır, bütün birimler yok edildiğinde kazanırsınız.</p>
   <h3>Asker Türleri</h3>
   <ul>
-    <li><strong>Piyade</strong>: 10 GIS Coin - 10 piyade bir "squad" oluşturur.</li>
-    <li><strong>Atlı Asker</strong>: 50 GIS Coin - 5 atlı asker bir "squad" oluşturur.</li>
-    <li><strong>Tank</strong>: 100 GIS Coin - Her bir tank tek başına güçlü bir birimdir.</li>
-    <li><strong>Uçak</strong>: 300 GIS Coin - Hızlı hareket eden bir birim, doğrudan hedefe uçar.</li>
+    <li><strong>Piyade</strong>: 100 GIS Coin - 10 piyade bir "squad" oluşturur. Bu birim sadece harita üzerindeki yollardan ilerleyebilir.</li>
+    <li><strong>Atlı Asker</strong>: 350 GIS Coin - 5 atlı asker bir "squad" oluşturur.Piyadeye benzer şekilde sadece yollardan ilerler</li>
+    <li><strong>Tank</strong>: 500 GIS Coin - Her bir tank tek başına güçlü bir birimdir. Düz çizgi halinde ilerler.</li>
+    <li><strong>Uçak</strong>: 600 GIS Coin - Hızlı hareket eden bir birim, doğrudan hedefe uçar.</li>
+    <li><strong>Satın alım sonrası</strong>: Herhangi bir birimi seçin ve harita üzerinde gitmesini istediğiniz lokasyona tıklayın, ardından o rotayı onaylamak için confirm route butonuna tıklayın. Bu işlemlerden sonra mobilize units butonu ile birliklerinizi hareket ettirin. Pozisyonlarınızdan eminseniz savaşı başlatın. Çünkü birimleriniz sabit kalacaktır bu tek seferde dikkatlice yapılması gereken bir plan.</li>
+    <li><strong>Confirm Route</strong>: Seçilen rotaları onaylar</li>
+    <li><strong>Mobilize Units</strong>: Birlikleri hareket ettirir.</li>
+    <li><strong>Start Battle</strong>: Savaşı başlatır.</li>
   </ul>
   <button onclick="returnToGame()">Oyuna Dön</button>
 </div>

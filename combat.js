@@ -7,8 +7,8 @@ let roundLog = []; // Log for each round
 const defenseUnitStats = {
   infantry: { attack: 100, health: 900, range: 100, speed: 100 },
   cavalry: { attack: 150, health: 1500, range: 100, speed: 80 },
-  cannonball: { attack: 80, health: 2000, range: 250, speed: 50, strongAgainst: ["tank"] },
-  machineGun: { attack: 80, health: 1500, range: 350, speed: 70, strongAgainst: ["airplane"] }
+  cannonball: { attack: 100, health: 2000, range: 200, speed: 50, strongAgainst: ["tank"] },
+  machineGun: { attack: 110, health: 2000, range: 250, speed: 70, strongAgainst: ["airplane"] }
 };
 
 // Place defense units on the map
@@ -113,7 +113,7 @@ function updateCurrentStatus(playerUnits, defenseUnits) {
     row.innerHTML = `
       <td>${capitalize(unit.type)}</td>
       <td>${Math.round(unit.stats.attack)}</td>
-      <td>${Math.round(unit.stats.currentHealth)}/${Math.round(unit.stats.health)}</td>
+      <td>${Math.round(unit.stats.currentHealth)}</td>
       <td>${Math.round(unit.stats.range)}</td>
     `;
     playerTableBody.appendChild(row);
