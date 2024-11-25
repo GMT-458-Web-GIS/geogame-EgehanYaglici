@@ -23,7 +23,9 @@ const tutorialSteps = [
   {
     message: {
       en: "Use 'Confirm Route' to finalize your unit movements. Infantry and Cavalry must follow roads. Confirm routes one-by-one.",
-      tr: "'Confirm Route' düğmesini kullanarak birim hareketlerini onaylayabilirsiniz. Piyade ve Süvari yalnızca yolları kullanabilir. Rotaları teker teker onaylamalısınız."
+      tr: "'Confirm Route' düğmesini kullanarak birim hareketlerini onaylayabilirsiniz. Piyade ve Süvari yalnızca yolları kullanabilir. Rotaları teker teker onaylamalısınız." +
+        "!! Yani ilk önce birimleri satın alın. Sonrasında harita üzerinden kendi birimlerinizden birine tıklayın. Seçili birim için yollara basıp rotasını saldıracağınız bölgeye doğru seçin. Burada, her birim için bir kere rotayı belirleyip confirm route tuşuna basıp, o rotayı kaydederek ilerlemeniz " +
+        "lazım. Bu şekilde hepsinin rotasını belirledikten sonra...(sonraki sayfaya geç)"
     },
     highlight: ".action-buttons .action-button:nth-child(1)"
   },
@@ -79,7 +81,7 @@ function positionHighlight(selector) {
     highlight.style.left = `${rect.left + window.scrollX}px`;
     highlight.style.display = "block";
 
-    // Arrow konumlandırma
+    // Arrow positioning
     arrow.style.top = `${rect.top + window.scrollY - 30}px`;
     arrow.style.left = `${rect.left + rect.width / 2 - 10}px`;
     arrow.style.display = "block";
@@ -95,7 +97,14 @@ function showTutorialStep() {
   }
 
   const message = document.getElementById("tutorial-message");
-  message.innerHTML = `<strong>EN:</strong> ${step.message.en}<br/><strong>TR:</strong> ${step.message.tr}`;
+  message.innerHTML = `
+    <strong>EN:</strong> ${step.message.en}<br/>
+    <strong>TR:</strong> ${step.message.tr}
+    <br/><br/>
+    <a href="https://youtu.be/N-K88tPyVBY" target="_blank" style="color: #007bff; text-decoration: underline;">
+      Watch Gameplay Video
+    </a>
+  `;
   positionHighlight(step.highlight);
 }
 

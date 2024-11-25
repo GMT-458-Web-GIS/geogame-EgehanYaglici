@@ -1,6 +1,7 @@
 ## Below parts belong final version of the game 
 
 #### Final Game Link: https://gmt-458-web-gis.github.io/geogame-EgehanYaglici/
+#### Game Play Video Link (example): https://www.youtube.com/watch?v=N-K88tPyVBY
 
 ---
 
