@@ -16,6 +16,171 @@ The **Current Status** section was also added to track unit health, attack power
 
 ---
 
+## Additional Details for Final Version  
+
+### Describe **three event handlers** you implemented in your repo part
+
+1. **Unit Selection Event** (player.js):  
+   - **Event Trigger**: A `click` event is attached to unit markers on the map. When the user clicks on a unit marker, it becomes the active unit for route planning or mobilization.  
+   - **Code Example**:  
+     ```javascript
+     unitMarker.on('click', () => {
+       selectSquad(unitMarker, squad, index);
+       alert(`You have selected ${squad.type.charAt(0).toUpperCase() + squad.type.slice(1)} Squad ${squad.id}.`);
+     });
+     ```
+   - **Purpose**: This interaction ensures a seamless way to select units, enhancing the user experience during route planning and unit mobilization.
+
+2. **Start Battle Event** (combat.js):  
+   - **Event Trigger**: The "Start Battle" button (`onclick`) initializes the battle system, automatically rolling dice and advancing the game through multiple rounds until one side is victorious.  
+   - **Code Example**:  
+     ```javascript
+     function startBattle() {
+       if (isBattleOngoing) return;
+
+       isBattleOngoing = true;
+       updateBattleLog("Battle started!");
+       executeRound();
+     }
+     ```
+   - **Purpose**: This serves as the starting point for the combat phase, ensuring the game progresses automatically through dice rolls and attack rounds.
+
+3. **Tutorial Navigation Event** (tutorial.js):  
+   - **Event Trigger**: A `click` event on the "Next" button moves the tutorial to the next step, updating the highlights and tutorial text dynamically.  
+   - **Code Example**:  
+     ```javascript
+     document.getElementById("tutorial-next").addEventListener("click", () => {
+       currentStep++;
+       showTutorialStep();
+     });
+     ```
+   - **Purpose**: Provides a user-friendly guide to the game, allowing players to learn mechanics step-by-step interactively.
+
+---
+
+### Describe how you benefited from **closures** in your project part
+
+Closures were utilized to encapsulate functionality and maintain state in dynamic contexts. For instance, closures allowed the dice rolling mechanism to remain modular, with private access to dice effects.  
+
+- **Example**: The `rollDice()` function uses closures to encapsulate the effects for each dice value.  
+   ```javascript
+   function rollDice() {
+     const effects = {
+       1: ["Penalty", "Range Reduction", "Minor Penalty", "Major Penalty"],
+       2: ["Shield Block", "Health Boost", "Shield Wall", "Minor Health Boost"],
+       // Additional dice effects...
+     };
+     return Math.floor(Math.random() * 6) + 1;
+   }
+
+### Describe what you have learned from AI (ChatGPT, Gemini, etc.), and state the URL of that interaction part
+
+- **Usage of AI**:  
+  I extensively used ChatGPT to debug and refine features like:  
+  1. **Handling Leaflet.js routing machine** for infantry/cavalry path planning.  
+  2. **Structuring the combat system** for dynamic dice effects and attack mechanics.  
+  3. **Building the interactive tutorial system** for guiding users through game mechanics.  
+
+- **Key Takeaways**:  
+  - AI tools streamlined the debugging process and provided valuable insights into modular coding practices.  
+  - I learned to structure my JavaScript code in a more reusable, modular way, especially for asynchronous workflows like dice animations and tutorial steps.
+
+- **Interaction URL**:  
+   [ChatGPT Interaction for GeoGame Development](https://chatgpt.com/share/6755520f-0010-8010-ad74-ef2231e59dc1)  
+
+### Describe how you interacted with the **DOM** part
+
+Interacting with the DOM was a critical part of building the game's user interface and ensuring real-time player feedback. Below are detailed examples of how the DOM was manipulated in various parts of the game:
+
+1. **Battle Log Updates**:  
+   - The battle log dynamically tracks and displays important events during gameplay, such as unit attacks, dice rolls, and health changes. Every action in the game is appended as a new line in the log, ensuring players have a clear record of the game's progression.  
+   - **Code Example**:  
+     ```javascript
+     function updateBattleLog(message) {
+       const log = document.getElementById("battle-log");
+       const logEntry = document.createElement("p");
+       logEntry.textContent = message;
+       log.appendChild(logEntry);
+       log.scrollTop = log.scrollHeight; // Auto-scroll to the latest entry
+     }
+     ```
+   - **Purpose**: This keeps players engaged by providing detailed, real-time updates of all interactions during the battle.
+
+2. **Dice Roll Effects**:  
+   - The dice roll system adds randomness to the game, and its results (both dice values and their corresponding effects) are dynamically displayed in the DOM. After each roll, the attack and defense effects are updated in their respective sections, helping players understand how the dice influence their strategy.  
+   - **Code Example**:  
+     ```javascript
+     document.getElementById("attack-dice").textContent = `🎲 ${attackDiceValue}`;
+     document.getElementById("defense-dice").textContent = `🎲 ${defenseDiceValue}`;
+     document.getElementById("attack-effect").textContent = `Attack Effect: ${attackEffect.description}`;
+     document.getElementById("defense-effect").textContent = `Defense Effect: ${defenseEffect.description}`;
+     ```
+   - **Purpose**: By directly updating the dice values and their effects, the DOM interaction ensures players are always aware of the current battle conditions and how they are impacted.
+
+3. **Tutorial Highlights**:  
+   - The tutorial system provides an interactive guide for new players by dynamically highlighting elements on the screen. This is achieved by calculating the bounding box of a specific element (e.g., the "Map Area" or "Purchase Units" section) and positioning a visual highlight around it. This ensures the highlighted element is clear and visually distinct.  
+   - **Code Example**:  
+     ```javascript
+     function positionHighlight(selector) {
+       const element = document.querySelector(selector);
+       const highlight = document.querySelector(".tutorial-highlight");
+
+       if (element) {
+         const rect = element.getBoundingClientRect();
+         highlight.style.width = `${rect.width}px`;
+         highlight.style.height = `${rect.height}px`;
+         highlight.style.top = `${rect.top + window.scrollY}px`;
+         highlight.style.left = `${rect.left + window.scrollX}px`;
+         highlight.style.display = "block";
+       }
+     }
+     ```
+   - **Purpose**: The tutorial system helps new players easily understand the game's mechanics by visually guiding them through key components and interactions.
+
+4. **Unit Status Updates**:  
+   - During the battle, the "Current Status" table dynamically updates to show the health, attack power, and range of both player and defense units. As units take damage or are destroyed, their stats in the table reflect these changes in real time.  
+   - **Code Example**:  
+     ```javascript
+     function updateCurrentStatus(playerUnits, defenseUnits) {
+       const playerTableBody = document.querySelector("#player-status-table tbody");
+       const defenseTableBody = document.querySelector("#defense-status-table tbody");
+
+       playerTableBody.innerHTML = "";
+       defenseTableBody.innerHTML = "";
+
+       playerUnits.forEach(unit => {
+         const row = document.createElement("tr");
+         row.innerHTML = `
+           <td>${unit.type}</td>
+           <td>${Math.round(unit.stats.attack)}</td>
+           <td>${Math.round(unit.stats.currentHealth)}</td>
+           <td>${Math.round(unit.stats.range)}</td>
+         `;
+         playerTableBody.appendChild(row);
+       });
+
+       defenseUnits.forEach(unit => {
+         const row = document.createElement("tr");
+         row.innerHTML = `
+           <td>${unit.type}</td>
+           <td>${Math.round(unit.attack)}</td>
+           <td>${Math.round(unit.health)}</td>
+           <td>${Math.round(unit.range)}</td>
+         `;
+         defenseTableBody.appendChild(row);
+       });
+     }
+     ```
+   - **Purpose**: This allows players to make strategic decisions based on real-time updates of unit stats, enhancing both the interactivity and depth of gameplay.
+
+5. **Dynamic Map Markers**:  
+   - When units are purchased or moved, their corresponding markers on the map are dynamically added, updated, or removed. Each marker includes tooltips and click event handlers, providing players with clear and interactive control over their units.  
+   - **Purpose**: This ensures that the map reflects the player's actions in real time, making gameplay visually intuitive.
+
+In summary, DOM interactions were used extensively to provide real-time feedback, enhance the player experience, and ensure a smooth and interactive interface for all aspects of the game.
+
+
+
 ### Layout Components
 
 | **Component**       | **Description**                                                                                                                                   |
